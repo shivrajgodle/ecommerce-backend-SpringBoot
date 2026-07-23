@@ -1,0 +1,55 @@
+# ============================================================
+# BASE CONFIG — shared across ALL profiles (dev/test/prod).
+# Profile-specific files OVERRIDE these values, they don't replace the file.
+# ============================================================
+
+spring:
+  application:
+    name: ecommerce-service
+
+  # Which profile is active. In real deployments this is usually set via
+  # an environment variable (SPRING_PROFILES_ACTIVE=prod) rather than hardcoded
+  # here — hardcoding it is fine for local revision purposes though.
+  profiles:
+    active: dev
+
+  jpa:
+    # Hibernate translates our JPQL/method-derived queries into SQL for
+    # whatever dialect we specify. Spring Boot 3 / Hibernate 6 usually
+    # auto-detects this from the driver, but being explicit avoids surprises.
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true          # pretty-prints SQL in logs
+        jdbc:
+          batch_size: 20           # batches inserts/updates — covered in Phase 2 (Batch ops)
+        order_inserts: true
+        order_updates: true
+
+  jackson:
+    default-property-inclusion: non_null   # nulls omitted from JSON responses
+    serialization:
+      write-dates-as-timestamps: false      # dates as ISO-8601 strings, not epoch millis
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Actuator: production-readiness endpoints (/actuator/health, /actuator/info, etc.)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info    # deliberately narrow — widened per-profile below
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{correlationId}] %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.learning.ecommerce: DEBUG

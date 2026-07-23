@@ -1,0 +1,30 @@
+# Activated in production via SPRING_PROFILES_ACTIVE=prod
+# NOTE: no literal secrets here. Values come from environment variables
+# at deploy time — this is the "12-factor app" config pattern.
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20     # connection pool sizing matters at scale — interview topic
+
+  jpa:
+    hibernate:
+      # NEVER auto-alter schema in prod. Schema changes go through
+      # reviewed migration scripts (Flyway/Liquibase — not covered here,
+      # worth learning separately).
+      ddl-auto: validate
+    show-sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics   # deliberately narrow — no /env, /beans, /heapdump exposed
+
+logging:
+  level:
+    root: WARN
+    com.learning.ecommerce: INFO

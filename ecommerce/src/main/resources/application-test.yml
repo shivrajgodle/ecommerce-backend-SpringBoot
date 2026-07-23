@@ -1,0 +1,17 @@
+# Activated during automated tests (Phase 14). Uses a throwaway in-memory-like setup.
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_test
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop   # fresh schema every test run, dropped after
+    show-sql: false
+
+logging:
+  level:
+    root: WARN
+    com.learning.ecommerce: INFO
