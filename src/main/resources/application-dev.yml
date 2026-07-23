@@ -1,0 +1,26 @@
+# Activated when spring.profiles.active=dev (our default while building locally)
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_dev
+    username: postgres
+    password: postgres          # fine for local dev only — never do this for prod
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      # 'update' lets Hibernate auto-alter your schema to match entities.
+      # Convenient while learning/iterating on entity design — DANGEROUS in prod.
+      ddl-auto: update
+    show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"    # everything open in dev — health, metrics, env, beans, etc.
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE   # shows bound parameter values in SQL logs
