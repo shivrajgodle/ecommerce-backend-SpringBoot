@@ -32,7 +32,7 @@ spring:
       write-dates-as-timestamps: false      # dates as ISO-8601 strings, not epoch millis
 
 server:
-  port: 8080
+  port: 9689
   error:
     include-message: always
     include-binding-errors: always
